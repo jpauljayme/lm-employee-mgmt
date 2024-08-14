@@ -1,0 +1,77 @@
+scalar Date
+
+type Query {
+    getEmployeeById(id: ID!): Employee
+    getAllEmployees: [Employee]!
+}
+
+type Mutation {
+    createEmployee(input: EmployeeInput!): Employee
+    updateEmployee(id: ID!, input: EmployeeInput!): Employee
+    deleteEmployee(id: ID!): Boolean
+}
+
+type Employee {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    middleName: String
+    birthdate: Date!
+    gender: Gender!
+    maritalStatus: MaritalStatus!
+    empPosition: String!
+    dateHired: Date!
+    addresses: [Address!]
+    contacts: [Contact!]
+}
+
+type Address {
+    id: ID!
+    isPrimary: Boolean
+    addressDetails: String!
+}
+
+type Contact {
+    id: ID!
+    isPrimary: Boolean
+    contactDetails: String!
+}
+
+input EmployeeInput {
+    firstName: String!
+    lastName: String!
+    middleName: String
+    birthdate: Date!
+    gender: Gender!
+    maritalStatus: MaritalStatus!
+    empPosition: String!
+    dateHired: Date!
+    addresses: [AddressInput!]!
+    contacts: [ContactInput!]!
+}
+
+input AddressInput {
+    value: String!
+    isPrimary: Boolean
+}
+
+input ContactInput {
+    value: String!
+    isPrimary: Boolean
+}
+
+enum Gender {
+    Male
+    Female
+    NonBinary
+    Other
+}
+
+enum MaritalStatus {
+    Single
+    Married
+    Divorced
+    Widowed
+    Separated
+    DomesticPartnership
+}
