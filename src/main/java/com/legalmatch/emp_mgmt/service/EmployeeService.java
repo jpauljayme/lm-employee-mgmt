@@ -47,7 +47,7 @@ public class EmployeeService {
                 .firstName(input.getFirstName())
                 .lastName(input.getLastName())
                 .middleName(input.getMiddleName())
-                .birthdate(input.getBirthdate())
+                .birthDate(input.getBirthDate())
                 .gender(input.getGender())
                 .maritalStatus(input.getMaritalStatus())
                 .empPosition(input.getEmpPosition())
@@ -68,7 +68,7 @@ public class EmployeeService {
         existingEmployee.setFirstName(input.getFirstName());
         existingEmployee.setLastName(input.getLastName());
         existingEmployee.setMiddleName(input.getMiddleName());
-        existingEmployee.setBirthdate(input.getBirthdate());
+        existingEmployee.setBirthDate(input.getBirthDate());
         existingEmployee.setGender(input.getGender());
         existingEmployee.setMaritalStatus(input.getMaritalStatus());
         existingEmployee.setEmpPosition(input.getEmpPosition());

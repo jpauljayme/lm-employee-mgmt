@@ -41,12 +41,13 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")  // No "ROLE_" prefix needed here
                         .requestMatchers("/user/**").hasRole("USER")
+
                         .anyRequest().authenticated()
                 )
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy))
-                .httpBasic(withDefaults())
+//                .httpBasic(withDefaults())
                 .formLogin(form -> form
 //                        .loginPage("/login") Optional : If i have more time to make a custom page
                                 .successHandler(successHandler)

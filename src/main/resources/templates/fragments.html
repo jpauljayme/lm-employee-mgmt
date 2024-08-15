@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>LM Employee Dashboard</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <script defer src="/js/employee.js"></script>
+
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" th:rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}"/>
+</head>
+<body>
+<!-- Employee Modal Fragment -->
+<div th:fragment="employeeModal">
+    <div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employeeModalLabel">Create Employee</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="employeeForm"
+                          hx-post="/admin/employees/createEmployee"
+                          hx-target="#employeeListContainer"
+                          hx-swap="outerHTML"
+                          th:object="${employeeInput}"
+                    >
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- Employee Details -->
+                                <div class="mb-3">
+                                    <label for="firstName" class="form-label">First Name:</label>
+                                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lastName" class="form-label">Last Name:</label>
+                                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="middleName" class="form-label">Middle Name:</label>
+                                    <input type="text" class="form-control" id="middleName" name="middleName">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="birthDate" class="form-label">Birth Date:</label>
+                                    <input type="date" class="form-control" id="birthDate" name="birthDate" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="gender" class="form-label">Gender:</label>
+                                    <select class="form-select" id="gender" name="gender" required>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Non-binary">Non-binary</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="maritalStatus" class="form-label">Marital Status:</label>
+                                    <select class="form-select" id="maritalStatus" name="maritalStatus" required>
+                                        <option value="Single">Single</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Divorced">Divorced</option>
+                                        <option value="Widowed">Widowed</option>
+                                        <option value="Separated">Separated</option>
+                                        <option value="Domestic Partnership">Domestic Partnership</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="empPosition" class="form-label">Position:</label>
+                                    <input type="text" class="form-control" id="empPosition" name="position" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dateHired" class="form-label">Date Hired:</label>
+                                    <input type="date" class="form-control" id="dateHired" name="dateHired" required>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <label class="form-label">Address Info:</label>
+                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                        onClick="addAddressInfoRow()">[Add]
+                                </button>
+                            </div>
+                            <div id="addressInfoContainer">
+                                <div th:each="address, iterStat : *{addresses}">
+                                    <input type="text"
+                                           th:name="'addresses[' + ${iterStat.index} + '].value'"
+                                           th:value="${address.value}"
+                                           th:field="*{addresses[__${iterStat.index}__].value}"
+                                           placeholder="Address">
+                                    <input type="checkbox"
+                                           th:name="'addresses[' + ${iterStat.index} + '].isPrimary'"
+                                           th:checked="${address.isPrimary}"
+                                           th:field="*{addresses[__${iterStat.index}__].isPrimary}"
+                                    >
+                                    <label>Primary?</label>
+                                </div>
+                            </div>
+                            <!-- Contact Info Section -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <label class="form-label">Contact Info:</label>
+                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                        onClick="addContactInfoRow()">[Add]
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" form="employeeForm">Save</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

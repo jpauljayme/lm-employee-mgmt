@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 @Builder(toBuilder = true)
@@ -28,7 +30,8 @@ public class Employee {
     @Column(name = "middle_name")
     private String middleName;
 
-    private LocalDate birthdate;
+    @Column(name = "birthdate")
+    private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -51,4 +54,44 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private Set<Contact> contacts;
 
+    public String getPrimaryAddress() {
+        return this.addresses.stream()
+                .filter(Address::getIsPrimary)
+                .findFirst()
+                .map(Address::getAddressDetails)
+                .orElse("N/A");
+    }
+
+    public String getPrimaryContact() {
+        return this.contacts.stream()
+                .filter(Contact::getIsPrimary)
+                .findFirst()
+                .map(Contact::getContactDetails)
+                .orElse("N/A");
+    }
+
+    public Long getAge(){
+        return ChronoUnit.YEARS.between(this.birthDate, LocalDate.now());
+    }
+
+    public String getTenure(){
+        if (this.dateHired == null) {
+            return "N/A";
+        }
+
+        Period period = Period.between(this.dateHired,  LocalDate.now());
+        int years = period.getYears();
+        int months = period.getMonths();
+
+        StringBuilder stringBuilder = new StringBuilder();
+        if(years > 0){
+            stringBuilder.append(years + "y");
+        }
+
+        if(months > 0){
+            stringBuilder.append(" " + months + "m");
+        }
+
+        return stringBuilder.toString();
+    }
 }

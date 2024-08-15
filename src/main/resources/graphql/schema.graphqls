@@ -16,7 +16,7 @@ type Employee {
     firstName: String!
     lastName: String!
     middleName: String
-    birthdate: Date!
+    birthDate: Date!
     gender: Gender!
     maritalStatus: MaritalStatus!
     empPosition: String!
@@ -42,13 +42,13 @@ input EmployeeInput {
     firstName: String!
     lastName: String!
     middleName: String
-    birthdate: Date!
+    birthDate: Date!
     gender: Gender!
     maritalStatus: MaritalStatus!
     empPosition: String!
     dateHired: Date!
-    addresses: [AddressInput!]!
-    contacts: [ContactInput!]!
+    addresses: [AddressInput!]
+    contacts: [ContactInput!]
 }
 
 input AddressInput {

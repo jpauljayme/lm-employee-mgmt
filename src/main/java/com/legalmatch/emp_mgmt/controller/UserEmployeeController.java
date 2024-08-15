@@ -7,12 +7,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
 @UserEndpoint
+@RequiredArgsConstructor
+@RequestMapping("/user/employees")
 public class UserEmployeeController {
     private final EmployeeService employeeService;
 

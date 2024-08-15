@@ -19,5 +19,15 @@ spring:
       enabled: true
 #      path: /graphql
 
+  thymeleaf:
+    cache: false
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
 server:
   port: 8081
+
+logging:
+  level:
+    org.springframework.web: trace
+    com.legalmatch.emp_mgmt: debug
