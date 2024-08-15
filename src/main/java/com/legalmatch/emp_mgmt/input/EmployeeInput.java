@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmployeeInput implements Input{
-
+    private Long id;
     private String firstName;
     private String lastName;
     private String middleName;

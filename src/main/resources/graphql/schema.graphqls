@@ -7,8 +7,8 @@ type Query {
 
 type Mutation {
     createEmployee(input: EmployeeInput!): Employee
-    updateEmployee(id: ID!, input: EmployeeInput!): Employee
-    deleteEmployee(id: ID!): Boolean
+    updateEmployee(input: EmployeeInput!): Employee
+    deleteEmployee(input: IdInput!): Boolean
 }
 
 type Employee {
@@ -38,6 +38,7 @@ type Contact {
 }
 
 input EmployeeInput {
+    id: ID
     firstName: String!
     lastName: String!
     middleName: String
@@ -51,13 +52,19 @@ input EmployeeInput {
 }
 
 input AddressInput {
+    id: ID
     value: String!
-    isPrimary: Boolean
+    isPrimary: Boolean!
 }
 
 input ContactInput {
+    id: ID
     value: String!
-    isPrimary: Boolean
+    isPrimary: Boolean!
+}
+
+input IdInput{
+    id: ID!
 }
 
 enum Gender {

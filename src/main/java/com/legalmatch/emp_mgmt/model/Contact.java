@@ -21,4 +21,8 @@ public class Contact {
 
     @Column(name = "contact_details")
     private String contactDetails;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 }

@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AddressInput implements Input{
-
+    private Long id;
     private String value;
     private Boolean isPrimary;
 }
