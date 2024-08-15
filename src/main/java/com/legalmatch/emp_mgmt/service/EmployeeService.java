@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
@@ -32,7 +33,6 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    @Transactional
     public Employee createEmployee(EmployeeInput input) {
 
         Set<Contact> contacts = input.getContacts().stream()
@@ -59,7 +59,7 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    @Transactional
+
     public Employee updateEmployee(EmployeeInput input) {
         Employee existingEmployee = employeeRepository.findById(input.getId())
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
@@ -74,28 +74,27 @@ public class EmployeeService {
         existingEmployee.setEmpPosition(input.getEmpPosition());
         existingEmployee.setDateHired(input.getDateHired());
 
-        // Update addresses
-        Set<Address> updatedAddresses = input.getAddresses().stream()
-                .map(addressInput -> Address.builder()
-                        .addressDetails(addressInput.getValue())
-                        .isPrimary(addressInput.getIsPrimary())
-                        .build())
-                .collect(Collectors.toSet());
+        // Save or update addresses
+        input.getAddresses().forEach(addressInput -> {
+            Address address = Address.builder()
+                    .id(addressInput.getId())  // Use id to determine if it’s an update
+                    .addressDetails(addressInput.getValue())
+                    .isPrimary(addressInput.getIsPrimary())
+                    .employee(existingEmployee)
+                    .build();
+            addressRepository.save(address);
+        });
 
-        addressRepository.saveAll(updatedAddresses);
-        existingEmployee.setAddresses(updatedAddresses);
-
-        // Update contacts
-        contactRepository.deleteAll(existingEmployee.getContacts());
-        Set<Contact> updatedContacts = input.getContacts().stream()
-                .map(contactInput -> Contact.builder()
-                        .contactDetails(contactInput.getValue())
-                        .isPrimary(contactInput.getIsPrimary())
-                        .build())
-                .collect(Collectors.toSet());
-
-        contactRepository.saveAll(updatedContacts);
-        existingEmployee.setContacts(updatedContacts);
+        // Save or update contacts
+        input.getContacts().forEach(contactInput -> {
+            Contact contact = Contact.builder()
+                    .id(contactInput.getId())  // Use id to determine if it’s an update
+                    .contactDetails(contactInput.getValue())
+                    .isPrimary(contactInput.getIsPrimary())
+                    .employee(existingEmployee)
+                    .build();
+            contactRepository.save(contact);
+        });
 
         return employeeRepository.save(existingEmployee);
     }
