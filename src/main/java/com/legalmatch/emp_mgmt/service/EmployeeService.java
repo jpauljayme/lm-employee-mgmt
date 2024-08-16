@@ -3,6 +3,7 @@ package com.legalmatch.emp_mgmt.service;
 import com.legalmatch.emp_mgmt.input.AddressInput;
 import com.legalmatch.emp_mgmt.input.ContactInput;
 import com.legalmatch.emp_mgmt.input.EmployeeInput;
+import com.legalmatch.emp_mgmt.input.IdInput;
 import com.legalmatch.emp_mgmt.model.*;
 import com.legalmatch.emp_mgmt.repository.AddressRepository;
 import com.legalmatch.emp_mgmt.repository.ContactRepository;
@@ -78,7 +79,7 @@ public class EmployeeService {
         input.getAddresses().forEach(addressInput -> {
             Address address = Address.builder()
                     .id(addressInput.getId())  // Use id to determine if it’s an update
-                    .addressDetails(addressInput.getValue())
+                    .addressDetails(addressInput.getAddressDetails())
                     .isPrimary(addressInput.getIsPrimary())
                     .employee(existingEmployee)
                     .build();
@@ -89,7 +90,7 @@ public class EmployeeService {
         input.getContacts().forEach(contactInput -> {
             Contact contact = Contact.builder()
                     .id(contactInput.getId())  // Use id to determine if it’s an update
-                    .contactDetails(contactInput.getValue())
+                    .contactDetails(contactInput.getContactDetails())
                     .isPrimary(contactInput.getIsPrimary())
                     .employee(existingEmployee)
                     .build();
@@ -99,8 +100,7 @@ public class EmployeeService {
         return employeeRepository.save(existingEmployee);
     }
 
-    public boolean deleteEmployee(EmployeeInput input) {
-        final long id = input.getId();
+    public boolean deleteEmployee(Long id) {
         if (employeeRepository.existsById(id)) {
             employeeRepository.deleteById(id);
             return true;
@@ -110,14 +110,14 @@ public class EmployeeService {
 
     private Address mapToAddressEntity(AddressInput addressInput) {
         return Address.builder()
-                .addressDetails(addressInput.getValue())
+                .addressDetails(addressInput.getAddressDetails())
                 .isPrimary(addressInput.getIsPrimary())
                 .build();
     }
 
     private Contact mapToContactEntity(ContactInput contactInput) {
         return Contact.builder()
-                .contactDetails(contactInput.getValue())
+                .contactDetails(contactInput.getContactDetails())
                 .isPrimary(contactInput.getIsPrimary())
                 .build();
     }

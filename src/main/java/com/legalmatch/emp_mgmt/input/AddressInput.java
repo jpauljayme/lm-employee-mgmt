@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 public class AddressInput implements Input{
     private Long id;
-    private String value;
+    private String addressDetails;
     private Boolean isPrimary;
 }

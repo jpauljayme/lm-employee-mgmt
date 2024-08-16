@@ -1,6 +1,7 @@
 package com.legalmatch.emp_mgmt.controller;
 
 import com.legalmatch.emp_mgmt.input.EmployeeInput;
+import com.legalmatch.emp_mgmt.input.IdInput;
 import com.legalmatch.emp_mgmt.model.Employee;
 import com.legalmatch.emp_mgmt.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class EmployeeGraphQLController {
     }
 
     @MutationMapping
-    public boolean deleteEmployee(@Argument EmployeeInput input){
+    public boolean deleteEmployee(@Argument Long input){
         return employeeService.deleteEmployee(input);
     }
 }

@@ -41,7 +41,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.employees{
+.grid__employees{
     grid-area: employees;
 }
 

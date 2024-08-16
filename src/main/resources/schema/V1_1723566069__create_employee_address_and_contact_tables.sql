@@ -5,14 +5,10 @@ CREATE TABLE IF NOT EXISTS employees(
     last_name VARCHAR(100) NOT NULL,
     middle_name VARCHAR(100),
     birthdate DATE NOT NULL,
-    gender ENUM('Male', 'Female', 'Non-binary', 'Other'),
-    marital_status ENUM('Single', 'Married', 'Divorced', 'Widowed', 'Separated', 'Domestic Partnership'),
+    gender ENUM('Male', 'Female', 'NonBinary', 'Other'),
+    marital_status ENUM('Single', 'Married', 'Divorced', 'Widowed', 'Separated', 'DomesticPartnership'),
     emp_position VARCHAR(50) NOT NULL,
     date_hired DATE NOT NULL
---    address_id INT NOT NULL,
---    contact_id INT NOT NULL,
---    FOREIGN KEY (address_id) REFERENCES address(id),
---    FOREIGN KEY (contact_id) REFERENCES contact(id)
 );
 
 CREATE TABLE IF NOT EXISTS address(

@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 public class ContactInput implements Input {
     private Long id;
-    private String value;
+    private String contactDetails;
     private Boolean isPrimary;
 }

@@ -2,12 +2,14 @@ package com.legalmatch.emp_mgmt.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
+@Slf4j
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
@@ -55,19 +57,22 @@ public class Employee {
     private Set<Contact> contacts;
 
     public String getPrimaryAddress() {
-        return this.addresses.stream()
+        return this.addresses.isEmpty() ? "N/A" :
+                this.addresses.stream()
                 .filter(Address::getIsPrimary)
                 .findFirst()
-                .map(Address::getAddressDetails)
+                .map(address -> address.getAddressDetails().isBlank() ? "N/A" : address.getAddressDetails())
                 .orElse("N/A");
     }
 
     public String getPrimaryContact() {
-        return this.contacts.stream()
+
+        return this.contacts.isEmpty() ? "NA" :
+                this.contacts.stream()
                 .filter(Contact::getIsPrimary)
                 .findFirst()
-                .map(Contact::getContactDetails)
-                .orElse("N/A");
+                .map(contact -> contact.getContactDetails().isBlank() ? "N/A" : contact.getContactDetails())
+                .orElse("NA");
     }
 
     public Long getAge(){
@@ -85,11 +90,11 @@ public class Employee {
 
         StringBuilder stringBuilder = new StringBuilder();
         if(years > 0){
-            stringBuilder.append(years + "y");
+            stringBuilder.append(years).append("y");
         }
 
         if(months > 0){
-            stringBuilder.append(" " + months + "m");
+            stringBuilder.append(" ").append(months).append("m");
         }
 
         return stringBuilder.toString();

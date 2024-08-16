@@ -8,7 +8,7 @@ type Query {
 type Mutation {
     createEmployee(input: EmployeeInput!): Employee
     updateEmployee(input: EmployeeInput!): Employee
-    deleteEmployee(input: IdInput!): Boolean
+    deleteEmployee(input: ID!): Boolean
 }
 
 type Employee {
@@ -61,10 +61,6 @@ input ContactInput {
     id: ID
     value: String!
     isPrimary: Boolean!
-}
-
-input IdInput{
-    id: ID!
 }
 
 enum Gender {

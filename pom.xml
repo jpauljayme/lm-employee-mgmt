@@ -123,9 +123,9 @@
 			<version>5.1.0</version>
 		</dependency>
 		<dependency>
-			<artifactId>bootstrap-icons</artifactId>
 			<groupId>org.webjars.npm</groupId>
-			<version>1.5.0</version>
+			<artifactId>bootstrap-icons</artifactId>
+			<version>1.11.3</version>
 		</dependency>
 		<dependency>
 			<artifactId>htmx.org</artifactId>

@@ -7,6 +7,11 @@ spring:
 
   jpa:
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+#        generate_statistics: true
 
   flyway:
     enabled: true
@@ -31,3 +36,4 @@ logging:
   level:
     org.springframework.web: trace
     com.legalmatch.emp_mgmt: debug
+    rg.hibernate.type: trace
