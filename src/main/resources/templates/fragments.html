@@ -230,6 +230,7 @@
                 </div>
                 <div id="updateEmployee_contactInfoContainer" class="form__update-employee__group col-md-6 ">
                     <div th:each="contact, iterStat : ${employee.contacts}">
+                        <input type="hidden" th:field="*{contacts[__${iterStat.index}__].id}">
                         <input type="text" class="form-control" placeholder="Contact Details"
                             th:field="*{contacts[__${iterStat.index}__].contactDetails}"
                         >
@@ -256,6 +257,7 @@
                 </div>
                 <div id="updateEmployee_addressInfoContainer" class="form__update-employee__group col-md-6 ">
                     <div th:each="address, iterStat : ${employee.addresses}">
+                        <input type="hidden" th:field="*{addresses[__${iterStat.index}__].id}">
                         <input type="text" class="form-control" placeholder="Address Details"
                                th:field="*{addresses[__${iterStat.index}__].addressDetails}"
                         >
@@ -273,7 +275,11 @@
             <!-- Buttons Section -->
             <div class="mt-4">
                 <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-secondary" hx-get="@{/admin/employees}" hx-swap="none">Back to Dashboard</button>
+                <button type="button" class="btn btn-secondary"
+                        hx-target=".grid__wrapper"
+                        hx-swap="innerHTML"
+                        hx-get="/admin/employees"
+                >Back to Dashboard</button>
             </div>
         </form>
     </div>

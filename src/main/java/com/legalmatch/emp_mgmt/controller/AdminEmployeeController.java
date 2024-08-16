@@ -24,25 +24,10 @@ public class AdminEmployeeController {
         model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
 
         EmployeeInput employeeInput = new EmployeeInput();
-//        employeeInput.addContact(ContactInput.builder()
-//                        .isPrimary(false)
-//                .build());
-//        employeeInput.addAddress(AddressInput
-//                .builder()
-//                        .isPrimary(false)
-//                .build());
         model.addAttribute("employeeInput", employeeInput);
-
         model.addAttribute("isAdmin", true);
-        return "admin/employees";
-    }
 
-    @GetMapping("/showUpdateEmployeeForm")
-    public String showUpdateEmployeeForm(Model model){
-        EmployeeInput employeeInput = new EmployeeInput();
-        model.addAttribute("employeeInput", employeeInput);
-
-        model.addAttribute("isAdmin", true);
+        log.debug("IN showEmployees!!!!!");
         return "admin/employees";
     }
 
@@ -54,17 +39,18 @@ public class AdminEmployeeController {
     }
 
     @PostMapping("/saveOrUpdate")
-    public String saveOrUpdateEmployee(@ModelAttribute EmployeeInput input, Model model){
+    public ResponseEntity<Object> saveOrUpdateEmployee(@ModelAttribute EmployeeInput input, Model model){
         if(input.getId() == null){
             employeeGraphQLController.createEmployee(input);
         }else{
             employeeGraphQLController.updateEmployee(input);
         }
 
-        // Reload the employee list
         model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
 
-        return "redirect:/";
+        return ResponseEntity.ok()
+                .header("HX-Redirect", "/admin/employees")
+                .build();
     }
 
     @PostMapping("/delete/{id}")
@@ -75,15 +61,5 @@ public class AdminEmployeeController {
         model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
 
         return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/update")
-    public String updateEmployee(@ModelAttribute EmployeeInput input, Model model){
-        employeeGraphQLController.updateEmployee(input);
-
-        // Reload the employee list
-        model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
-
-        return "fragments :: employeeList";
     }
 }
