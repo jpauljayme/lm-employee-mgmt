@@ -1,35 +1,53 @@
 function addAddressInfoRow() {
-    const container = document.getElementById('addressInfoContainer');
-    const rowIndex = container ? container.children.length : 0;
-    const newAddress = document.createElement('div');
+    const container = document.getElementById('updateEmployee_addressInfoContainer');
+    const addressIndex = document.querySelectorAll('#updateEmployee_addressInfoContainer input[type="text"]').length;
+    const newInputGroup = document.createElement('div');
+    newInputGroup.className = 'form__update-employee__group mt-2';
 
-    newAddress.innerHTML = `
-        <input type="text"
-        class="form-control me-2"
-        name="addresses[${rowIndex}].value"
-        placeholder="Address">
-        <input type="checkbox"
-            class="form-check-input me-1"
-            name="addresses[${rowIndex}].isPrimary">
-        <label class="form-check-label">Primary?</label>
-    `;
-    container.appendChild(newAddress);
+    const newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.name = `addresses[${addressIndex}].addressDetails`;
+    newInput.className = 'form__update-employee__input form-control';
+    newInput.placeholder = 'Address Details';
+
+    const newCheckbox = document.createElement('input');
+    newCheckbox.type = 'checkbox';
+    newCheckbox.name = `addresses[${addressIndex}].isPrimary`;
+
+    const newLabel = document.createElement('label');
+    newLabel.innerHTML = 'Primary?';
+    newLabel.className = 'form-check-label ms-2';
+
+    newInputGroup.appendChild(newInput);
+    newInputGroup.appendChild(newCheckbox);
+    newInputGroup.appendChild(newLabel);
+
+    container.appendChild(newInputGroup);
 }
 
 function addContactInfoRow() {
-    const container = document.getElementById('contactInfoContainer');
-    const rowIndex = container ? container.children.length : 0;
-    const newContact = document.createElement('div');
+    const container = document.getElementById('updateEmployee_contactInfoContainer');
+    const contactIndex = document.querySelectorAll('#updateEmployee_contactInfoContainer input[type="text"]').length;
+    const newInputGroup = document.createElement('div');
+    newInputGroup.className = 'form__update-employee__group mt-2';
 
-    newContact.innerHTML = `
-        <input type="text"
-        class="form-control me-2"
-        name="contacts[${rowIndex}].value"
-        placeholder="Address">
-        <input type="checkbox"
-            class="form-check-input me-1"
-            name="contacts[${rowIndex}].isPrimary">
-        <label class="form-check-label">Primary?</label>
-    `;
-    container.appendChild(newContact);
+    const newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.name = `contacts[${contactIndex}].contactDetails`;
+    newInput.className = 'form__update-employee__input form-control';
+    newInput.placeholder = 'Contact Details';
+
+    const newCheckbox = document.createElement('input');
+    newCheckbox.type = 'checkbox';
+    newCheckbox.name = `contacts[${contactIndex}].isPrimary`;
+
+    const newLabel = document.createElement('label');
+    newLabel.innerHTML = 'Primary?';
+    newLabel.className = 'form-check-label ms-2';
+
+    newInputGroup.appendChild(newInput);
+    newInputGroup.appendChild(newCheckbox);
+    newInputGroup.appendChild(newLabel);
+
+    container.appendChild(newInputGroup);
 }

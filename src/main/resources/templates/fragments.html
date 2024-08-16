@@ -16,7 +16,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="employeeForm"
+                    <form id="newEmployeeForm"
                           hx-post="/admin/employees/saveOrUpdate"
                           hx-target="#employeeListContainer"
                           hx-swap="outerHTML"
@@ -24,7 +24,7 @@
                           th:object="${employeeInput}"
                     >
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6-md-6">
                                 <!-- Employee Details -->
                                 <div class="mb-3">
                                     <label for="firstName" class="form-label">First Name:</label>
@@ -130,7 +130,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" form="employeeForm">Save</button>
+                    <button type="submit" class="btn btn-success" form="newEmployeeForm">Save</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -138,6 +138,147 @@
     </div>
 </div>
 
+<!-- Employee Form -->
+<div th:fragment="updateEmployeeForm">
+    <div class="container">
+        <form class="form__update-employee"
+              th:object="${employee}"
+              hx-post="/admin/employees/saveOrUpdate"
+              hx-swap="none"
+        >
+            <input th:field="*{id}" type="hidden">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="firstName">First Name</label>
+                    <input type="text" class="form-control" placeholder="First name"
+                           th:field="*{firstName}"
+                           required
+                    >
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" class="form-control" placeholder="Last name"
+                           th:field="*{lastName}"
+                           required
+                    >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="middleName">Middle Name</label>
+                    <input type="text" class="form-control" placeholder="Middle name"
+                           th:field="*{middleName}"
+                           required
+                    >
+                </div>
+                <div class="col-md-6">
+                    <label for="birthDate">Birth Date</label>
+                    <input type="date" class="form-control" placeholder="Birth Date"
+                           th:name="birthDate"
+                           th:value="${employee.birthDate}"
+                           required
+                    >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="gender">Gender</label>
+                    <select class="form-select" th:field="*{gender}" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="NonBinary">Non-binary</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="maritalStatus">Marital Status</label>
+                    <select class="form-select" th:field="*{maritalStatus}" name="maritalStatus" required>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+                        <option value="Separated">Separated</option>
+                        <option value="DomesticPartnership">Domestic Partnership</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="empPosition">Position</label>
+                    <input type="text" class="form-control" placeholder="Position"
+                           th:field="*{empPosition}"
+                           th:name="empPosition"
+                    >
+                </div>
+                <div class="col-md-6">
+                    <label for="dateHired">Date Hired</label>
+                    <input type="date" class="form-control" placeholder="Date Hired"
+                           th:name="dateHired"
+                           th:value="${employee.dateHired}"
+                           required
+                    >
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form__update-employee__group-contact-info col-md-6">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label>Contact Info</label>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onClick="addContactInfoRow()">
+                            Add New Contact
+                        </button>
+                    </div>
+                </div>
+                <div id="updateEmployee_contactInfoContainer" class="form__update-employee__group col-md-6 ">
+                    <div th:each="contact, iterStat : ${employee.contacts}">
+                        <input type="text" class="form-control" placeholder="Contact Details"
+                            th:field="*{contacts[__${iterStat.index}__].contactDetails}"
+                        >
+                        <input type="checkbox"
+                               th:checked="${contact.isPrimary}"
+                               th:field="*{contacts[__${iterStat.index}__].isPrimary}"
+                        >
+                        <!-- Hidden field for when checkbox is not checked -->
+                        <input type="hidden" th:name="'contacts[' + ${iterStat.index} + '].isPrimary'"
+                               value="false">
+                        <label class="form-check-label ms-2">Primary?</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form__update-employee__group-contact-info col-md-6">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label>Address Info</label>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onClick="addAddressInfoRow()">
+                            Add New Address
+                        </button>
+                    </div>
+                </div>
+                <div id="updateEmployee_addressInfoContainer" class="form__update-employee__group col-md-6 ">
+                    <div th:each="address, iterStat : ${employee.addresses}">
+                        <input type="text" class="form-control" placeholder="Address Details"
+                               th:field="*{addresses[__${iterStat.index}__].addressDetails}"
+                        >
+                        <input type="checkbox"
+                               th:checked="${address.isPrimary}"
+                               th:field="*{addresses[__${iterStat.index}__].isPrimary}"
+                        >
+                        <!-- Hidden field for when checkbox is not checked -->
+                        <input type="hidden" th:name="'addresses[' + ${iterStat.index} + '].isPrimary'"
+                               value="false">
+                        <label class="form-check-label ms-2">Primary?</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Buttons Section -->
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary" hx-get="@{/admin/employees}" hx-swap="none">Back to Dashboard</button>
+            </div>
+        </form>
+    </div>
+
+</div>
 <!----- Employee List Fragment ---->
 <div th:fragment="employeeList">
     <div class="table-responsive"
@@ -162,16 +303,11 @@
                 <td th:text="${employee.getAge()}"></td>
                 <td th:text="${employee.getTenure()}"></td>
                 <td>
-                    <!--                <button href="#" class="btn btn-sm btn-warning"-->
-                    <!--                        hx-get="@{/admin/employees/edit/(id=${employee.id})}"-->
-                    <!--                        hx-target="#employeeModal .modal-content">-->
-                    <!--                    Edit-->
-                    <!--                </button>-->
+
                     <button class="btn btn-warning"
-                            data-bs-toggle="modal"
-                            data-bs-target="#employeeModal"
                             th:hx-get="@{/admin/employees/{id}(id=${employee.id})}"
-                            hx-target="#employeeModal .modal-content"
+                            hx-target=".grid__employees"
+                            hx-swap="innerHTML"
                     >
                         <i class="bi bi-pen"></i>
                         Edit

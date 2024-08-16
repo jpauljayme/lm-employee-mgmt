@@ -37,11 +37,20 @@ public class AdminEmployeeController {
         return "admin/employees";
     }
 
+    @GetMapping("/showUpdateEmployeeForm")
+    public String showUpdateEmployeeForm(Model model){
+        EmployeeInput employeeInput = new EmployeeInput();
+        model.addAttribute("employeeInput", employeeInput);
+
+        model.addAttribute("isAdmin", true);
+        return "admin/employees";
+    }
+
     @GetMapping("/{id}")
     public String getEmployeeById(@PathVariable Long id, Model model){
         Employee employee = employeeGraphQLController.getEmployeeById(id);
-        model.addAttribute("employeeInput", employee);
-        return "fragments :: employeeModal";  // Returning the modal content as a fragment
+        model.addAttribute("employee", employee);
+        return "fragments :: updateEmployeeForm";  // Returning the modal content as a fragment
     }
 
     @PostMapping("/saveOrUpdate")
@@ -55,7 +64,7 @@ public class AdminEmployeeController {
         // Reload the employee list
         model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
 
-        return "fragments :: employeeList";
+        return "redirect:/";
     }
 
     @PostMapping("/delete/{id}")

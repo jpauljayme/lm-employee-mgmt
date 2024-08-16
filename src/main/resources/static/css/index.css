@@ -45,12 +45,16 @@ body {
     grid-area: employees;
 }
 
-/* Custom width for modal */
 .modal-dialog {
     margin: 1.75rem auto; /* Centering the modal */
 }
 
-/* Optional: Adjust modal body padding */
 .modal-body {
     padding: 2rem;
 }
+
+.form__update-employee{
+    width:70%;
+    margin: 0 auto;
+}
+
