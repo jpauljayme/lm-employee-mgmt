@@ -3,13 +3,15 @@ package com.legalmatch.emp_mgmt.service;
 import com.legalmatch.emp_mgmt.input.AddressInput;
 import com.legalmatch.emp_mgmt.input.ContactInput;
 import com.legalmatch.emp_mgmt.input.EmployeeInput;
-import com.legalmatch.emp_mgmt.input.IdInput;
-import com.legalmatch.emp_mgmt.model.*;
+import com.legalmatch.emp_mgmt.model.Address;
+import com.legalmatch.emp_mgmt.model.Contact;
+import com.legalmatch.emp_mgmt.model.Employee;
 import com.legalmatch.emp_mgmt.repository.AddressRepository;
 import com.legalmatch.emp_mgmt.repository.ContactRepository;
 import com.legalmatch.emp_mgmt.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
