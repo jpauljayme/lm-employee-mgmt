@@ -5,8 +5,13 @@ spring:
     password: adminadmin
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  jpa:
-    show-sql: true
+#  jpa:
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        use_sql_comments: true
+#        generate_statistics: true
 
   flyway:
     enabled: true
@@ -19,5 +24,16 @@ spring:
       enabled: true
 #      path: /graphql
 
+  thymeleaf:
+    cache: false
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
 server:
   port: 8081
+
+logging:
+  level:
+    org.springframework.web: debug
+#    com.legalmatch.emp_mgmt: debug
+#    org.hibernate.type: trace

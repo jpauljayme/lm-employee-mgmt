@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>LM Employee Dashboard</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+</head>
+<body>
+<!-- Employee Form -->
+<div th:fragment="createOrUpdateEmployeeForm">
+    <div class="container">
+        <h2 th:text="${title}"></h2>
+        <form class="form__update-employee"
+              th:object="${employee}"
+              hx-post="/admin/employees/saveOrUpdate"
+              hx-swap="none"
+        >
+            <input th:field="*{id}" type="hidden">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="firstName">First Name</label>
+                    <input type="text" class="form-control" placeholder="First name"
+                           th:field="*{firstName}"
+                           required
+                           th:readonly="${!isAdmin}"
+                           id="firstName"
+                    >
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" class="form-control" placeholder="Last name"
+                           th:field="*{lastName}"
+                           required
+                           th:readonly="${!isAdmin}"
+                           id="lastName"
+                    >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="middleName">Middle Name</label>
+                    <input type="text" class="form-control" placeholder="Middle name"
+                           th:field="*{middleName}"
+                           th:readonly="${!isAdmin}"
+                           id="middleName"
+                    >
+                </div>
+                <div class="col-md-6">
+                    <label for="birthDate">Birth Date</label>
+                    <input type="date" class="form-control" placeholder="Birth Date"
+                           th:name="birthDate"
+                           th:value="${employee.birthDate}"
+                           required
+                           th:readonly="${!isAdmin}"
+                           id="birthDate"
+                    >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="gender">Gender</label>
+                    <select class="form-select" th:field="*{gender}"
+                            required
+                            th:disabled="${!isAdmin}"
+                            id="gender"
+                    >
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="NonBinary">Non-binary</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="maritalStatus">Marital Status</label>
+                    <select class="form-select" th:field="*{maritalStatus}" name="maritalStatus" required
+                            th:disabled="${!isAdmin}"
+                            id="maritalStatus"
+                    >
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+                        <option value="Separated">Separated</option>
+                        <option value="DomesticPartnership">Domestic Partnership</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="empPosition">Position</label>
+                    <input type="text" class="form-control" placeholder="Position"
+                           th:field="*{empPosition}"
+                           th:name="empPosition"
+                           required
+                           th:readonly="${!isAdmin}"
+                           id="empPosition"
+                    >
+                </div>
+                <div class="col-md-6">
+                    <label for="dateHired">Date Hired</label>
+                    <input type="date" class="form-control" placeholder="Date Hired"
+                           th:name="dateHired"
+                           th:value="${employee.dateHired}"
+                           required
+                           th:readonly="${!isAdmin}"
+                           id="dateHired"
+                    >
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form__update-employee__group-contact-info col-md-6">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label>Contact Info</label>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onClick="addContactInfoRow()">
+                            Add New Contact
+                        </button>
+                    </div>
+                </div>
+                <div id="updateEmployee_contactInfoContainer" class="form__update-employee__group col-md-6 ">
+                    <div th:each="contact, iterStat : ${employee.contacts}">
+                        <input type="hidden" th:field="*{contacts[__${iterStat.index}__].id}">
+                        <input type="text" class="form-control" placeholder="Contact Details"
+                               th:field="*{contacts[__${iterStat.index}__].contactDetails}"
+                               th:if="${isAdmin ? null : readOnly }"
+                        >
+                        <input type="checkbox"
+                               th:checked="${contact.isPrimary}"
+                               th:field="*{contacts[__${iterStat.index}__].isPrimary}"
+                               th:disabled="${!isAdmin}"
+                        >
+                        <!-- Hidden field for when checkbox is not checked -->
+                        <input type="hidden" th:field="*{contacts[__${iterStat.index}__].isPrimary}" value="false"
+                               th:if="${isAdmin ? null : readOnly }">
+                        <label class="form-check-label ms-2">Primary?</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form__update-employee__group-contact-info col-md-6">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label>Address Info</label>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onClick="addAddressInfoRow()">
+                            Add New Address
+                        </button>
+                    </div>
+                </div>
+                <div id="updateEmployee_addressInfoContainer" class="form__update-employee__group col-md-6 ">
+                    <div th:each="address, iterStat : ${employee.addresses}">
+                        <input type="hidden" th:field="*{addresses[__${iterStat.index}__].id}">
+
+                        <input type="text" class="form-control" placeholder="Address Details"
+                               th:field="*{addresses[__${iterStat.index}__].addressDetails}"
+                               th:readonly="${!isAdmin}"
+                        >
+                        <input type="checkbox"
+                               th:checked="${address.isPrimary}"
+                               th:field="*{addresses[__${iterStat.index}__].isPrimary}"
+                               th:disabled="${!isAdmin}"
+                        >
+                        <!-- Hidden field for when checkbox is not checked -->
+                        <input type="hidden" th:field="*{addresses[__${iterStat.index}__].isPrimary}" value="false">
+                        <label class="form-check-label ms-2">Primary?</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Buttons Section -->
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary"
+                        th:hidden="${!isAdmin}"
+                >Save
+                </button>
+                <button type="button" class="btn btn-secondary"
+                        hx-target=".grid__wrapper"
+                        hx-swap="innerHTML"
+                        th:attr="hx-get=${isAdmin} ? '/admin/employees' : '/user/employees'"
+                >Back to Dashboard
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<!----- Employee List Fragment ---->
+<div th:fragment="employeeList">
+    <div class="table-responsive"
+         id="employeeListContainer"
+    >
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Primary Address</th>
+                <th>Primary Contact Info</th>
+                <th>Age</th>
+                <th># of Years in the Company</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.firstName + ' ' + employee.lastName}"></td>
+                <td th:text="${employee.getPrimaryAddress()}"></td>
+                <td th:text="${employee.getPrimaryContact()}"></td>
+                <td th:text="${employee.getAge()}"></td>
+                <td th:text="${employee.getTenure()}"></td>
+                <td>
+
+                    <button class="btn btn-warning"
+                            th:hx-get="@{/admin/employees/{id}(id=${employee.id})}"
+                            hx-target=".grid__employees"
+                            hx-swap="innerHTML"
+                            th:if="${isAdmin}"
+                    >
+                        <i class="bi bi-pen"></i>
+                        Edit
+                    </button>
+                    <button class="btn btn-warning"
+                            th:hx-get="@{/user/employees/{id}(id=${employee.id})}"
+                            hx-target=".grid__employees"
+                            hx-swap="innerHTML"
+                            th:if="${!isAdmin}"
+                    >
+                        <i class="bi bi-pen"></i>
+                        View
+                    </button>
+                    <button href="#" class="btn btn-sm btn-danger"
+                            th:hx-post="@{/admin/employees/delete/{id}(id=${employee.id})}"
+                            hx-confirm="Are you sure you want to delete this employee?"
+                            hx-target="closest tr"
+                            hx-swap="outerHTML:remove">
+                        <i class="bi bi-trash"></i>
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

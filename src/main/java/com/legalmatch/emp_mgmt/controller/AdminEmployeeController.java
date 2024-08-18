@@ -3,50 +3,79 @@ package com.legalmatch.emp_mgmt.controller;
 import com.legalmatch.emp_mgmt.admin.auth.AdminEndpoint;
 import com.legalmatch.emp_mgmt.input.EmployeeInput;
 import com.legalmatch.emp_mgmt.model.Employee;
-import com.legalmatch.emp_mgmt.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Slf4j
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/admin/employees")
 @AdminEndpoint
 public class AdminEmployeeController {
 
-    private final EmployeeService employeeService;
+    private final EmployeeGraphQLController employeeGraphQLController;
 
-    @GetMapping
-    @QueryMapping
-    public List<Employee> getAllEmployees(){
-        return employeeService.getAllEmployees();
+    @ModelAttribute("isAdmin")
+    public boolean isAdmin() {
+        return true;
+    }
+
+    @GetMapping("")
+    public String showEmployees(Model model) {
+        model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
+
+        EmployeeInput employeeInput = new EmployeeInput();
+        model.addAttribute("employeeInput", employeeInput);
+
+        return "employees";
     }
 
     @GetMapping("/{id}")
-    @QueryMapping
-    public Employee getEmployeeById(@Argument Long id){
-        return employeeService.getEmployeeById(id);
+    public String showUpdateEmployeeForm(@PathVariable Long id, Model model) {
+        Employee employee = employeeGraphQLController.getEmployeeById(id);
+
+        model.addAttribute("employee", employee);
+        model.addAttribute("title", "Edit Employee Form");
+
+        return "fragments :: createOrUpdateEmployeeForm";  // Returning the modal content as a fragment
     }
 
-    @PostMapping("/create")
-    @MutationMapping
-    public Employee createEmployee(@Argument EmployeeInput input){
-        return employeeService.createEmployee(input);
+    @GetMapping("/create")
+    public String showCreateEmployeeForm(Model model) {
+        EmployeeInput employee = EmployeeInput.builder().build();
+
+        model.addAttribute("employee", employee);
+
+        model.addAttribute("title", "Create Employee Form");
+        return "fragments :: createOrUpdateEmployeeForm";  // Returning the modal content as a fragment
     }
 
-    @PostMapping("/update")
-    @MutationMapping
-    public Employee updateEmployee(@Argument EmployeeInput input){
-        return employeeService.updateEmployee(input);
+
+    @PostMapping("/saveOrUpdate")
+    public ResponseEntity<Object> saveOrUpdateEmployee(@ModelAttribute EmployeeInput input, Model model) {
+        if (input.getId() == null) {
+            employeeGraphQLController.createEmployee(input);
+        } else {
+            employeeGraphQLController.updateEmployee(input);
+        }
+
+        model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
+
+        return ResponseEntity.ok()
+                .header("HX-Redirect", "/admin/employees")
+                .build();
     }
 
-    @DeleteMapping("/update")
-    @MutationMapping
-    public boolean deleteEmployee(@Argument EmployeeInput input){
-        return employeeService.deleteEmployee(input);
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id, Model model) {
+        employeeGraphQLController.deleteEmployee(id);
+
+        model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
+
+        return ResponseEntity.ok().build();
     }
 }

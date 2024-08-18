@@ -5,9 +5,9 @@ import lombok.*;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ContactInput implements Input {
     private Long id;
-    private String value;
+    private String contactDetails;
     private Boolean isPrimary;
 }
