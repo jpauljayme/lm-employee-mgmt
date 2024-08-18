@@ -19,30 +19,47 @@ public class AdminEmployeeController {
 
     private final EmployeeGraphQLController employeeGraphQLController;
 
+    @ModelAttribute("isAdmin")
+    public boolean isAdmin() {
+        return true;
+    }
+
     @GetMapping("")
-    public String showEmployees(Model model){
+    public String showEmployees(Model model) {
         model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
 
         EmployeeInput employeeInput = new EmployeeInput();
         model.addAttribute("employeeInput", employeeInput);
-        model.addAttribute("isAdmin", true);
 
-        log.debug("IN showEmployees!!!!!");
-        return "admin/employees";
+        return "employees";
     }
 
     @GetMapping("/{id}")
-    public String getEmployeeById(@PathVariable Long id, Model model){
+    public String showUpdateEmployeeForm(@PathVariable Long id, Model model) {
         Employee employee = employeeGraphQLController.getEmployeeById(id);
+
         model.addAttribute("employee", employee);
-        return "fragments :: updateEmployeeForm";  // Returning the modal content as a fragment
+        model.addAttribute("title", "Edit Employee Form");
+
+        return "fragments :: createOrUpdateEmployeeForm";  // Returning the modal content as a fragment
     }
 
+    @GetMapping("/create")
+    public String showCreateEmployeeForm(Model model) {
+        EmployeeInput employee = EmployeeInput.builder().build();
+
+        model.addAttribute("employee", employee);
+
+        model.addAttribute("title", "Create Employee Form");
+        return "fragments :: createOrUpdateEmployeeForm";  // Returning the modal content as a fragment
+    }
+
+
     @PostMapping("/saveOrUpdate")
-    public ResponseEntity<Object> saveOrUpdateEmployee(@ModelAttribute EmployeeInput input, Model model){
-        if(input.getId() == null){
+    public ResponseEntity<Object> saveOrUpdateEmployee(@ModelAttribute EmployeeInput input, Model model) {
+        if (input.getId() == null) {
             employeeGraphQLController.createEmployee(input);
-        }else{
+        } else {
             employeeGraphQLController.updateEmployee(input);
         }
 
@@ -54,10 +71,9 @@ public class AdminEmployeeController {
     }
 
     @PostMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id, Model model){
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id, Model model) {
         employeeGraphQLController.deleteEmployee(id);
 
-        // Reload the employee list
         model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
 
         return ResponseEntity.ok().build();

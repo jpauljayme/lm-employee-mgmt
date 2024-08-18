@@ -111,14 +111,14 @@ public class EmployeeService {
     private Address mapToAddressEntity(AddressInput addressInput) {
         return Address.builder()
                 .addressDetails(addressInput.getAddressDetails())
-                .isPrimary(addressInput.getIsPrimary() ? addressInput.getIsPrimary() : false)
+                .isPrimary( ObjectUtils.isNotEmpty(addressInput.getIsPrimary()) ? addressInput.getIsPrimary() : false)
                 .build();
     }
 
     private Contact mapToContactEntity(ContactInput contactInput) {
         return Contact.builder()
                 .contactDetails(contactInput.getContactDetails())
-                .isPrimary(contactInput.getIsPrimary() ? contactInput.getIsPrimary() : false)
+                .isPrimary(ObjectUtils.isNotEmpty(contactInput.getIsPrimary()) ? contactInput.getIsPrimary() : false)
                 .build();
     }
 }
