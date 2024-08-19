@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
-import java.util.Set;
+import java.util.List;
 
 @Slf4j
 @Builder(toBuilder = true)
@@ -16,6 +16,7 @@ import java.util.Set;
 @Setter
 @Getter
 @Entity
+@EqualsAndHashCode
 @Table(name = "employees")
 public class Employee {
 
@@ -50,11 +51,11 @@ public class Employee {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "employee_id")
-    private Set<Address> addresses;
+    private List<Address> addresses;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "employee_id")
-    private Set<Contact> contacts;
+    private List<Contact> contacts;
 
     public String getPrimaryAddress() {
         return this.addresses.isEmpty() ? "N/A" :
