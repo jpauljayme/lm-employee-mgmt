@@ -28,6 +28,15 @@ spring:
 server:
   port: 8081
 
+## User Management
+To login as an admin -
+Username : admin
+Password : admin123
+
+To login as a user -
+Username : user
+Password : user123
+
 ```
 ## Application Server Deployment
 
@@ -77,7 +86,7 @@ C:\path\to\tomcat\bin\startup.bat
 
 ### Access the Application:
 
-Open a web browser and navigate to http://localhost:8081
+Open a web browser and navigate to http://localhost:8081.
 The application should now be running and accessible at this URL.
 Monitor the Deployment:
 
