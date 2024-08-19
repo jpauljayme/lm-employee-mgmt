@@ -140,7 +140,6 @@ class EmployeeServiceTest {
         given(employeeRepository.save(any(Employee.class)))
                 .willReturn(employee);
 
-
         final Employee savedEmployee = employeeService.createEmployee(employeeInput);
 
         assertThat(savedEmployee)
@@ -151,15 +150,6 @@ class EmployeeServiceTest {
     public void whenDeleteEmployee() {
 
         Long employeeId = 1L;
-        Address address = Address.builder()
-                .id(1L)
-                .addressDetails("In the middle of nothing and what the water gave me")
-                .build();
-
-        Contact contact = Contact.builder()
-                .id(1L)
-                .contactDetails("+123456")
-                .build();
 
         given(employeeRepository.existsById(employeeId))
                 .willReturn(true);
