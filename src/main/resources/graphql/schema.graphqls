@@ -1,8 +1,10 @@
 scalar Date
+scalar Long
 
 type Query {
     getEmployeeById(id: ID!): Employee
     getAllEmployees: [Employee]!
+    getPaginatedEmployees(page: Int, size: Int): EmployeePage!
 }
 
 type Mutation {
@@ -23,6 +25,13 @@ type Employee {
     dateHired: Date!
     addresses: [Address!]
     contacts: [Contact!]
+}
+
+type EmployeePage {
+    content: [Employee!]!
+    totalElements: Long!
+    totalPages: Int!
+    currentPage: Int!
 }
 
 type Address {

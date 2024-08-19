@@ -16,7 +16,7 @@
               hx-swap="none"
         >
             <input th:field="*{id}" type="hidden">
-            <div class="row">
+            <div class="row mb-5">
                 <div class="col-md-6">
                     <label for="firstName">First Name</label>
                     <input type="text" class="form-control" placeholder="First name"
@@ -36,7 +36,7 @@
                     >
                 </div>
             </div>
-            <div class="row">
+            <div class="row mb-5">
                 <div class="col-md-6">
                     <label for="middleName">Middle Name</label>
                     <input type="text" class="form-control" placeholder="Middle name"
@@ -56,7 +56,7 @@
                     >
                 </div>
             </div>
-            <div class="row">
+            <div class="row mb-5">
                 <div class="col-md-6">
                     <label for="gender">Gender</label>
                     <select class="form-select" th:field="*{gender}"
@@ -85,7 +85,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mb-5">
                 <div class="col-md-6">
                     <label for="empPosition">Position</label>
                     <input type="text" class="form-control" placeholder="Position"
@@ -107,7 +107,7 @@
                     >
                 </div>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-5">
                 <div class="form__update-employee__group-contact-info col-md-6">
                     <div class="d-flex justify-content-between align-items-center">
                         <label>Contact Info</label>
@@ -130,11 +130,12 @@
                         <!-- Hidden field for when checkbox is not checked -->
                         <input type="hidden" th:field="*{contacts[__${iterStat.index}__].isPrimary}" value="false"
                                th:readOnly="${isAdmin}">
+                        <label class="form-check-label ms-2">Primary?</label>
                     </div>
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row mb-5">
                 <div class="form__update-employee__group-contact-info col-md-6">
                     <div class="d-flex justify-content-between align-items-center">
                         <label>Address Info</label>
@@ -196,7 +197,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="employee : ${employees}">
+            <tr th:each="employee : ${employeePage.content}">
                 <td th:text="${employee.firstName + ' ' + employee.lastName}"></td>
                 <td th:text="${employee.getPrimaryAddress()}"></td>
                 <td th:text="${employee.getPrimaryContact()}"></td>
@@ -234,6 +235,57 @@
             </tr>
             </tbody>
         </table>
+
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link"
+                       th:if="${isAdmin}"
+                       th:hx-get="@{/admin/employees(page=${currentPage - 1}, size=5)}"
+                       hx-target="#employeeListContainer"
+                       hx-swap="innerHTML">Previous</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link"
+                       th:unless="${isAdmin}"
+                       th:hx-get="@{/user/employees(page=${currentPage - 1}, size=5)}"
+                       hx-target="#employeeListContainer"
+                       hx-swap="innerHTML">Previous</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link"
+                       th:if="${isAdmin}"
+                       th:hx-get="@{/admin/employees(page=${i}, size=5)}"
+                       hx-target="#employeeListContainer"
+                       hx-swap="innerHTML"
+                       th:text="${i + 1}">1</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link"
+                       th:unless="${isAdmin}"
+                       th:hx-get="@{/user/employees(page=${i}, size=5)}"
+                       hx-target="#employeeListContainer"
+                       hx-swap="innerHTML"
+                       th:text="${i + 1}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                    <a class="page-link"
+                       th:if="${isAdmin}"
+                       th:hx-get="@{/admin/employees(page=${currentPage + 1}, size=5)}"
+                       hx-target="#employeeListContainer"
+                       hx-swap="innerHTML">Next</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                    <a class="page-link"
+                       th:unless="${isAdmin}"
+                       th:hx-get="@{/user/employees(page=${currentPage + 1}, size=5)}"
+                       hx-target="#employeeListContainer"
+                       hx-swap="innerHTML">Next</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 </body>

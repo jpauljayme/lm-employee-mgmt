@@ -1,15 +1,12 @@
 package com.legalmatch.emp_mgmt.controller;
 
-import com.legalmatch.emp_mgmt.input.EmployeeInput;
 import com.legalmatch.emp_mgmt.model.Employee;
+import com.legalmatch.emp_mgmt.model.EmployeePage;
 import com.legalmatch.emp_mgmt.user.auth.UserEndpoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @UserEndpoint
@@ -24,13 +21,17 @@ public class UserEmployeeController {
     }
 
     @GetMapping("")
-    public String showEmployees(Model model) {
-        model.addAttribute("employees", employeeGraphQLController.getAllEmployees());
+    public String showPaginatedEmployees(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "5") int size,
+                                         @RequestHeader(value = "HX-Request", defaultValue = "false") boolean isHxRequest,
+                                         Model model) {
+        EmployeePage employeePage = employeeGraphQLController.getPaginatedEmployees(page, size);
 
-        EmployeeInput employeeInput = new EmployeeInput();
-        model.addAttribute("employeeInput", employeeInput);
+        model.addAttribute("employeePage", employeePage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", employeePage.getTotalPages());
 
-        return "employees";
+        return isHxRequest ? "fragments :: employeeList" : "employees";
     }
 
     @GetMapping("/{id}")
@@ -40,6 +41,6 @@ public class UserEmployeeController {
         model.addAttribute("employee", employee);
         model.addAttribute("title", "View Employee Details");
         model.addAttribute("isAdmin", false);
-        return "fragments :: createOrUpdateEmployeeForm";  // Returning the modal content as a fragment
+        return "fragments :: createOrUpdateEmployeeForm";
     }
 }

@@ -1,6 +1,7 @@
 package com.legalmatch.emp_mgmt.config;
 
 import com.legalmatch.emp_mgmt.login.AppAuthenticationSuccessHandler;
+import com.legalmatch.emp_mgmt.logout.AppLogoutSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableMethodSecurity
@@ -23,6 +23,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private final AppAuthenticationSuccessHandler successHandler;
+    private final AppLogoutSuccessHandler logoutSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,16 +45,15 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")  // No "ROLE_" prefix needed here
                         .requestMatchers("/user/**").hasRole("USER")
-
                         .anyRequest().authenticated()
                 )
-//                .httpBasic(withDefaults())
                 .formLogin(form -> form
-//                        .loginPage("/login") Optional : If i have more time to make a custom page
-                                .successHandler(successHandler)
-                                .permitAll()
+                        .successHandler(successHandler)
+                        .permitAll()
                 )
-                .logout(withDefaults());
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessHandler(logoutSuccessHandler));
 
         return http.build();
     }
