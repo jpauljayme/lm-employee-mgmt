@@ -97,3 +97,8 @@ To run sonarqube analysis please use the following command in the terminal
   -Dsonar.host.url=http://localhost:9000 \
   -Dsonar.token=sqp_ea09d21fb42e17f72f9eedb23bdec71b80e6483e
 ```
+
+To view the analysis, go to -
+```
+http://localhost:9000/dashboard?id=dev-lm-emp-mgmt
+```
