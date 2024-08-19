@@ -85,6 +85,10 @@ Check the Tomcat logs for any errors during deployment. Logs are typically locat
 Ensure that the application has started successfully and is functioning as expected.
 
 ## SonarQube
+Install the server via docker
+```
+$ docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest
+```
 To run sonarqube analysis please use the following command in the terminal
 ```bash
  mvn clean verify sonar:sonar \                                   
