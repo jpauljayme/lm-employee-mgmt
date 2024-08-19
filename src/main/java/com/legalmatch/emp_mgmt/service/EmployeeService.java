@@ -12,6 +12,8 @@ import com.legalmatch.emp_mgmt.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -112,14 +114,18 @@ public class EmployeeService {
     private Address mapToAddressEntity(AddressInput addressInput) {
         return Address.builder()
                 .addressDetails(addressInput.getAddressDetails())
-                .isPrimary(ObjectUtils.isNotEmpty(addressInput.getIsPrimary()) ? addressInput.getIsPrimary() : false)
+                .isPrimary(ObjectUtils.isNotEmpty(addressInput.getIsPrimary()) && addressInput.getIsPrimary())
                 .build();
     }
 
     private Contact mapToContactEntity(ContactInput contactInput) {
         return Contact.builder()
                 .contactDetails(contactInput.getContactDetails())
-                .isPrimary(ObjectUtils.isNotEmpty(contactInput.getIsPrimary()) ? contactInput.getIsPrimary() : false)
+                .isPrimary(ObjectUtils.isNotEmpty(contactInput.getIsPrimary()) && contactInput.getIsPrimary())
                 .build();
+    }
+
+    public Page<Employee> getPaginatedEmployees(int page, int size) {
+        return employeeRepository.findAll(PageRequest.of(page,size));
     }
 }
