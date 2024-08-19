@@ -1,7 +1,6 @@
 package com.legalmatch.emp_mgmt.controller;
 
 import com.legalmatch.emp_mgmt.input.EmployeeInput;
-import com.legalmatch.emp_mgmt.input.IdInput;
 import com.legalmatch.emp_mgmt.model.Employee;
 import com.legalmatch.emp_mgmt.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class EmployeeGraphQLController {
 
     @QueryMapping
     public Employee getEmployeeById(@Argument Long id){
-        return employeeService.getEmployeeById(id);
+        return employeeService.getEmployeeById(id).orElseThrow();
     }
 
     @MutationMapping

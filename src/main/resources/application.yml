@@ -5,14 +5,6 @@ spring:
     password: adminadmin
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-#  jpa:
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
-#        use_sql_comments: true
-#        generate_statistics: true
-
   flyway:
     enabled: true
     baselineOnMigrate: true
@@ -22,7 +14,6 @@ spring:
   graphql:
     graphiql:
       enabled: true
-#      path: /graphql
 
   thymeleaf:
     cache: false
@@ -35,5 +26,3 @@ server:
 logging:
   level:
     org.springframework.web: debug
-#    com.legalmatch.emp_mgmt: debug
-#    org.hibernate.type: trace

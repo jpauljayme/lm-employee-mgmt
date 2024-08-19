@@ -15,8 +15,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,23 +27,23 @@ public class EmployeeService {
     private final ContactRepository contactRepository;
 
 
-    public Employee getEmployeeById(Long id) {
-        return employeeRepository.findById(id).orElse(null);
+    public Optional<Employee> getEmployeeById(Long id) {
+        return employeeRepository.findById(id);
     }
 
-    public List<Employee> getAllEmployees(){
+    public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
 
     public Employee createEmployee(EmployeeInput input) {
 
-        Set<Contact> contacts = input.getContacts().stream()
+        List<Contact> contacts = input.getContacts().stream()
                 .map(this::mapToContactEntity)
-                .collect(Collectors.toSet());
+                .toList();
 
-        Set<Address> addresses = input.getAddresses().stream()
+        List<Address> addresses = input.getAddresses().stream()
                 .map(this::mapToAddressEntity)
-                .collect(Collectors.toSet());
+                .toList();
 
         Employee employee = Employee.builder()
                 .firstName(input.getFirstName())
@@ -113,7 +112,7 @@ public class EmployeeService {
     private Address mapToAddressEntity(AddressInput addressInput) {
         return Address.builder()
                 .addressDetails(addressInput.getAddressDetails())
-                .isPrimary( ObjectUtils.isNotEmpty(addressInput.getIsPrimary()) ? addressInput.getIsPrimary() : false)
+                .isPrimary(ObjectUtils.isNotEmpty(addressInput.getIsPrimary()) ? addressInput.getIsPrimary() : false)
                 .build();
     }
 
