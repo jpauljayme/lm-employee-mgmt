@@ -19,7 +19,7 @@ body {
     grid-area: header;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     padding: 10px;
     border-bottom: 1px solid #dee2e6;
 }
@@ -43,6 +43,8 @@ body {
 
 .grid__employees{
     grid-area: employees;
+    display:grid;
+    gap: 20px;
 }
 
 .modal-dialog {
@@ -57,4 +59,3 @@ body {
     width:70%;
     margin: 0 auto;
 }
-
