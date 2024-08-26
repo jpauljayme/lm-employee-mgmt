@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -54,5 +55,25 @@ public class EmployeeGraphQLController {
     @MutationMapping
     public boolean deleteEmployee(@Argument Long input){
         return employeeService.deleteEmployee(input);
+    }
+
+    @SchemaMapping(typeName = "Employee", field = "primaryAddress")
+    public String getPrimaryAddress(Employee employee) {
+        return employee.getPrimaryAddress();
+    }
+
+    @SchemaMapping(typeName = "Employee", field = "primaryContact")
+    public String getPrimaryContact(Employee employee) {
+        return employee.getPrimaryContact();
+    }
+
+    @SchemaMapping(typeName = "Employee", field = "age")
+    public Long getAge(Employee employee) {
+        return employee.getAge();
+    }
+
+    @SchemaMapping(typeName = "Employee", field = "tenure")
+    public String getTenure(Employee employee) {
+        return employee.getTenure();
     }
 }

@@ -23,6 +23,10 @@ type Employee {
     maritalStatus: MaritalStatus!
     empPosition: String!
     dateHired: Date!
+    primaryAddress: String
+    primaryContact: String
+    age: Long
+    tenure: String
     addresses: [Address!]
     contacts: [Contact!]
 }
@@ -62,13 +66,13 @@ input EmployeeInput {
 
 input AddressInput {
     id: ID
-    value: String!
+    addressDetails: String!
     isPrimary: Boolean!
 }
 
 input ContactInput {
     id: ID
-    value: String!
+    contactDetails: String!
     isPrimary: Boolean!
 }
 
