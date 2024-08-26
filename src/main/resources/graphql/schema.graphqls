@@ -23,6 +23,10 @@ type Employee {
     maritalStatus: MaritalStatus!
     empPosition: String!
     dateHired: Date!
+    primaryAddress: String
+    primaryContact: String
+    age: Long
+    tenure: String
     addresses: [Address!]
     contacts: [Contact!]
 }

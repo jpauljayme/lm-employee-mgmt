@@ -78,26 +78,28 @@ public class EmployeeService {
         existingEmployee.setEmpPosition(input.getEmpPosition());
         existingEmployee.setDateHired(input.getDateHired());
 
-        // Save or update addresses
+        // Clear and add updated addresses
+        existingEmployee.getAddresses().clear();
         input.getAddresses().forEach(addressInput -> {
             Address address = Address.builder()
-                    .id(addressInput.getId())  // Use id to determine if it’s an update
+                    .id(addressInput.getId())
                     .addressDetails(addressInput.getAddressDetails())
                     .isPrimary(addressInput.getIsPrimary())
                     .employee(existingEmployee)
                     .build();
-            addressRepository.save(address);
+            existingEmployee.getAddresses().add(address);
         });
 
-        // Save or update contacts
+        // Clear and add updated contacts
+        existingEmployee.getContacts().clear();
         input.getContacts().forEach(contactInput -> {
             Contact contact = Contact.builder()
-                    .id(contactInput.getId())  // Use id to determine if it’s an update
+                    .id(contactInput.getId())
                     .contactDetails(contactInput.getContactDetails())
                     .isPrimary(contactInput.getIsPrimary())
                     .employee(existingEmployee)
                     .build();
-            contactRepository.save(contact);
+            existingEmployee.getContacts().add(contact);
         });
 
         return employeeRepository.save(existingEmployee);
