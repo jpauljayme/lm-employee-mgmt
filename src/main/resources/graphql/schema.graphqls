@@ -66,13 +66,13 @@ input EmployeeInput {
 
 input AddressInput {
     id: ID
-    addressDetails: String!
+    value: String!
     isPrimary: Boolean!
 }
 
 input ContactInput {
     id: ID
-    contactDetails: String!
+    value: String!
     isPrimary: Boolean!
 }
 
